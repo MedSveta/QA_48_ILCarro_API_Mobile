@@ -17,7 +17,7 @@ public class RegistrationTestsRest extends AuthenticationController {
     public void registrationPositiveTest(){
         int i = new Random().nextInt(1000);
         RegistrationBodyDto user = RegistrationBodyDto.builder()
-                .username("sima_simonova"+i+"@gmail.com")
+                .username("sima_simonova"+i+"@gmail.com")//Sima_simonova"+i+"@gmail.com
                 .password("BSas124!")
                 .firstName("Sima")
                 .lastName("Simonova")
@@ -26,6 +26,10 @@ public class RegistrationTestsRest extends AuthenticationController {
                 .getStatusCode(), 200);
     }
 
+    //min = q@q.q; @gmail.com; sima@; sima@.com; sima@gmail;
+    //sima@gmail.; sima@@gmail.com; sima@gmail..com;
+    //[space]sima@gmail.com; sima@gmail.com[space]; sima[space]@gmail.com;
+    //sima@ыфя.com;
     @Test
     public void registrationNegativeTest_WrongEmail(){
         int i = new Random().nextInt(1000);
@@ -45,6 +49,50 @@ public class RegistrationTestsRest extends AuthenticationController {
         System.out.println(errorMessageDtoString);
         softAssert.assertTrue(errorMessageDtoString.getMessage().toString()
                 .contains("must be a well-formed"), "validate message");
+        softAssert.assertAll();
+    }
+    @Test
+    public void registrationNegativeTest_WrongPassword(){
+        int i = new Random().nextInt(1000);
+        RegistrationBodyDto user = RegistrationBodyDto.builder()
+                .username("sima_simonova"+i+"@gmail.com")
+                .password("deas124!")//DEAS124$  Deastyu*  DEas1245  DEas12#   DEas[space]12#   DEas123.  AAыы123$
+                .firstName("Sima")
+                .lastName("Simonova")
+                .build();
+        Response response = registrationLogin(user, REGISTRATION_URL);
+        softAssert.assertEquals(response.getStatusCode(), 400,
+                "validate status code");
+        ErrorMessageDtoString errorMessageDtoString = response.getBody()
+                .as(ErrorMessageDtoString.class);
+        softAssert.assertEquals(errorMessageDtoString.getError(),
+                "Bad Request", "validate error");
+        System.out.println(errorMessageDtoString);
+        softAssert.assertTrue(errorMessageDtoString.getMessage().toString()
+                .contains("Must contain at least 1 uppercase letter, 1 lowercase letter,"),
+                "validate error message");
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void registrationNegativeTest_EmptyField(){
+        int i = new Random().nextInt(1000);
+        RegistrationBodyDto user = RegistrationBodyDto.builder()
+                .username("sima_simonova"+i+"@gmail.com")
+                .password("BSas124!")
+                .firstName("Sima")
+                .lastName("")
+                .build();
+        Response response = registrationLogin(user, REGISTRATION_URL);
+        softAssert.assertEquals(response.getStatusCode(), 400,
+                "validate status code");
+        ErrorMessageDtoString errorMessageDtoString = response.getBody()
+                .as(ErrorMessageDtoString.class);
+        softAssert.assertEquals(errorMessageDtoString.getError(),
+                "Bad Request", "validate error");
+        System.out.println(errorMessageDtoString);
+        softAssert.assertTrue(errorMessageDtoString.getMessage().toString()
+                .contains("must not be blank"), "validate message");
         softAssert.assertAll();
     }
 }
