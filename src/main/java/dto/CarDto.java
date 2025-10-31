@@ -2,6 +2,8 @@ package dto;
 
 import lombok.*;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Builder
@@ -18,5 +20,13 @@ public class CarDto {
     private int seats;
     private String carClass;
     private double pricePerDay;
+    private String about;
     private String city;
+
+    private double lat;
+    private double lng;
+    private String image;
+    private String owner;
+
+    BookedDto[] bookedPeriods;
 }

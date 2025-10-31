@@ -24,6 +24,7 @@ public class AddNewCarTestsRest extends CarController {
               .seats(4)
               .carClass("A")
               .pricePerDay(38.0)
+              .about("")
               .city("Haifa")
               .build();
       Response response = addNewCar(car);

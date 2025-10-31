@@ -58,4 +58,31 @@ public class CarController implements BaseApi {
                 .post(BASE_URL + ADD_NEW_CAR_URL)
                 .thenReturn();
     }
+
+    public Response getAllUserCars() {
+        return given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", tokenDto.getAccessToken())
+                .when()
+                .get(BASE_URL + GET_ALL_USER_CARS_URL)
+                .thenReturn();
+    }
+
+    public Response getAllUserCarsNegative_WrongUrl(String url) {
+        return given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", tokenDto.getAccessToken())
+                .when()
+                .get(BASE_URL + url)
+                .thenReturn();
+    }
+
+    public Response deleteCarBySerialNumber(String serialNumber) {
+        return given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", tokenDto.getAccessToken())
+                .when()
+                .delete(BASE_URL + DELETE_CAR_URL + serialNumber)
+                .thenReturn();
+    }
 }
