@@ -26,6 +26,9 @@ public class SearchScreen extends BaseScreen{
     public void clickBtnLogout(){
         clickWait(btnLogout, 3);
     }
+    public void clickBtnMyCars(){
+        clickWait(btnMyCars, 3);
+    }
 
     public void clickBtnDots(){
         clickWait(btnDots, 3);

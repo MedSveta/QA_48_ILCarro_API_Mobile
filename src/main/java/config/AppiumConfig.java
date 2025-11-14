@@ -12,6 +12,7 @@ import java.net.URL;
 
 public class AppiumConfig {
     public static AppiumDriver<AndroidElement> driver;
+    public static int height = 0, width = 0;
 
     @BeforeMethod
     public void setup(){
@@ -36,6 +37,9 @@ public class AppiumConfig {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+
+        height = driver.manage().window().getSize().getHeight();
+        width = driver.manage().window().getSize().getWidth();
     }
 
     @AfterMethod(enabled = false)

@@ -3,6 +3,7 @@ package rest_tests;
 import api_rest.CarController;
 import dto.CarDto;
 import dto.ErrorMessageDtoString;
+import enums.Fuel;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;

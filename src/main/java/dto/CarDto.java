@@ -1,5 +1,6 @@
 package dto;
 
+import enums.Fuel;
 import lombok.*;
 
 import java.util.Objects;
