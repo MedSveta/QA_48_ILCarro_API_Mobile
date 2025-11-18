@@ -53,4 +53,78 @@ public class AddNewCarTests extends AppiumConfig {
         Assert.assertTrue(new MyCarsScreen(driver)
                 .textInPopUpMessageSuccessPresent("Car was added!"));
     }
+
+    @Test
+    public void addNewCarNegativeTest_DuplicateSerialNumber(){
+        CarDto car = CarDto.builder()
+                .serialNumber("088-1978")
+                .manufacture("Mazda")
+                .model("CX5")
+                .city("Haifa")
+                .pricePerDay(23.5)
+                .carClass("A")
+                .fuel("Diesel")
+                .year("2024")
+                .seats(4)
+                .build();
+        SearchScreen searchScreen = new SearchScreen(driver);
+        searchScreen.clickBtnDots();
+        searchScreen.clickBtnMyCars();
+        MyCarsScreen myCarsScreen = new MyCarsScreen(driver);
+        myCarsScreen.clickBtnAddNewCar();
+        AddNewCarScreen addNewCarScreen = new AddNewCarScreen(driver);
+        addNewCarScreen.typeAddNewCarForm(car);
+        addNewCarScreen.clickBtnAddCar();
+        Assert.assertTrue(new ErrorScreen(driver)
+                .validateErrorMessage("already exists"));
+    }
+    @Test
+    public void addNewCarNegativeTest_AllFieldsEmpty(){
+        CarDto car = CarDto.builder()
+                .serialNumber("")
+                .manufacture("")
+                .model("")
+                .city("")
+                .pricePerDay(0.)
+                .carClass("")
+                .fuel("")
+                .year("")
+                .seats(0)
+                .build();
+        SearchScreen searchScreen = new SearchScreen(driver);
+        searchScreen.clickBtnDots();
+        searchScreen.clickBtnMyCars();
+        MyCarsScreen myCarsScreen = new MyCarsScreen(driver);
+        myCarsScreen.clickBtnAddNewCar();
+        AddNewCarScreen addNewCarScreen = new AddNewCarScreen(driver);
+        addNewCarScreen.typeAddNewCarForm(car);
+        addNewCarScreen.clickBtnAddCar();
+        Assert.assertTrue(new ErrorScreen(driver)
+                .validateErrorMessage("Fields: Serial number, Manufacture, Model, City, Price per day is required!"));
+    }
+    @Test
+    public void addNewCarNegativeTest_WrongFieldYear_BUG(){
+        int i = new Random().nextInt(1000)+1000;
+        CarDto car = CarDto.builder()
+                .serialNumber("088-"+i)
+                .manufacture("Mazda")
+                .model("CX5")
+                .city("Haifa")
+                .pricePerDay(23.5)
+                .carClass("A")
+                .fuel("Diesel")
+                .year("-1")
+                .seats(4)
+                .build();
+        SearchScreen searchScreen = new SearchScreen(driver);
+        searchScreen.clickBtnDots();
+        searchScreen.clickBtnMyCars();
+        MyCarsScreen myCarsScreen = new MyCarsScreen(driver);
+        myCarsScreen.clickBtnAddNewCar();
+        AddNewCarScreen addNewCarScreen = new AddNewCarScreen(driver);
+        addNewCarScreen.typeAddNewCarForm(car);
+        addNewCarScreen.clickBtnAddCar();
+        Assert.assertTrue(new ErrorScreen(driver)
+                .validateErrorMessage("wrong format year"));
+    }
 }
